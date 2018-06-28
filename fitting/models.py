@@ -1,5 +1,7 @@
 from django.db import models
 
+# BIG TODO: define all basic effects (ex. turret tracking +X%, shield capacity +X, etc.)
+
 
 class Hull(models.Model):
     FACTION_CHOICES = (
@@ -16,10 +18,13 @@ class Hull(models.Model):
         ('sisters', 'Sisters Of EVE')
     )
     CLASS_CHOICES = (
-        ('shuttle', 'SHUTTLE'),
-        ('frigate', 'FRIGATE'),
-        ('cruiser', 'CRUISER'),
-        # TODO
+        ('shuttle', 'Shuttle'),
+        ('corvette', 'Corvette'),
+        ('frigate', 'Frigate'),
+        ('cruiser', 'Cruiser'),
+        ('bcruiser', 'Battlecruiser'),
+        ('bship', 'Battleship'),
+        ('capital', 'Capital'),
     )
     name = models.TextField('Hull name', max_length=40)
     hull_class = models.TextField(choices=CLASS_CHOICES)
@@ -35,7 +40,6 @@ class Hull(models.Model):
     turrets = models.IntegerField('Max mounted turrets')
     drone_capacity = models.IntegerField()
     drone_bandwith = models.IntegerField()
-
     calibration = models.IntegerField()
     power = models.IntegerField('Powergrid')
     cpu = models.IntegerField('CPU')
@@ -61,6 +65,20 @@ class Module(models.Model):
     slot = models.TextField(choices=SLOT_CHOICES)
     required_cpu = models.IntegerField('CPU')
     required_power = models.IntegerField('Powergrid')
+    # TODO: effect = ...
 
     def __str__(self):
         return f'{self.slot}|{self.name}'
+
+
+class Rig(models.Model):
+    SIZE_CHOICES = (
+        ('S', 'Small'),
+        ('M', 'Medium'),
+        ('L', 'Large'),
+        ('C', 'Capital')
+    )
+    size = models.TextField(choices=SIZE_CHOICES)
+    calibration = models.IntegerField('Calibration cost')
+    drawback = models.IntegerField('Drawback [%]')
+    # TODO: effect = ...
