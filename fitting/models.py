@@ -34,7 +34,7 @@ class Hull(models.Model):
     slots_low = models.IntegerField('Number of low powered slots')
     slots_medium = models.IntegerField('Number of medium powered slots')
     slots_high = models.IntegerField('Number of high powered slots')
-    slots_rigs = models.IntegerField('Number of rig slots')  # TODO: distinct size of rigs (choices ex. LARGE_3, MED_2)
+    slots_rigs = models.IntegerField('Number of rig slots')
 
     launchers = models.IntegerField('Max mounted launchers')
     turrets = models.IntegerField('Max mounted turrets')
