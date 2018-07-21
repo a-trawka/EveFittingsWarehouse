@@ -49,7 +49,7 @@ class HullDetailTestCase(TestCase):
     def test_valid_hull(self):
         valid_hull = create_hull('Test Hull')
         response = self.client.get(reverse('fitting:hull', args=(valid_hull.id,)))
-        self.assertQuerysetEqual(response.context['hull'], ['<Hull: Test Hull>'])
+        self.assertContains(response, valid_hull.name)
 
     def test_wrong_id(self):
         response = self.client.get(reverse('fitting:hull', args=(10,)))
