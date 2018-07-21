@@ -42,3 +42,15 @@ class HullIndexTestCase(TestCase):
         response = self.client.get(reverse('fitting:hulls'))
         expected_qs = [f'<Hull: Test Hull {i}>' for i in range(1, 6)]
         self.assertQuerysetEqual(response.context['hulls'], expected_qs, ordered=False)
+
+
+class HullDetailTestCase(TestCase):
+
+    def test_valid_hull(self):
+        valid_hull = create_hull('Test Hull')
+        response = self.client.get(reverse('fitting:hull', args=(valid_hull.id,)))
+        self.assertQuerysetEqual(response.context['hull'], ['<Hull: Test Hull>'])
+
+    def test_wrong_id(self):
+        response = self.client.get(reverse('fitting:hull', args=(10,)))
+        self.assertEqual(response.status_code, 404)
