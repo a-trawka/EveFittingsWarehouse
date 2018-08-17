@@ -56,3 +56,5 @@ class HullTestCase(TestCase):
     def test_wrong_id(self):
         response = self.client.get(reverse('fitting:hull', args=(10,)))
         self.assertEqual(response.status_code, 404)
+
+# TODO: Modules View Case

@@ -1,7 +1,5 @@
 from django.db import models
 
-# BIG TODO: define all basic effects (ex. turret tracking +X%, shield capacity +X, etc.)
-
 
 class Hull(models.Model):
     FACTION_CHOICES = (
@@ -15,7 +13,8 @@ class Hull(models.Model):
         ('mordu', "Mordu's Legion"),
         ('sansha', "Sansha's Nation"),
         ('serpentis', 'Serpentis'),
-        ('sisters', 'Sisters Of EVE')
+        ('sisters', 'Sisters Of EVE'),
+        ('triglavian', 'Triglavian Collective')
     )
     CLASS_CHOICES = (
         ('shuttle', 'Shuttle'),
@@ -26,7 +25,7 @@ class Hull(models.Model):
         ('bship', 'Battleship'),
         ('capital', 'Capital'),
     )
-    name = models.TextField('Hull name', max_length=40)
+    name = models.TextField('Hull name', unique=True, max_length=40)
     hull_class = models.TextField(choices=CLASS_CHOICES)
     faction = models.TextField(choices=FACTION_CHOICES)
     tier = models.IntegerField()
@@ -41,34 +40,42 @@ class Hull(models.Model):
     drone_capacity = models.IntegerField()
     drone_bandwith = models.IntegerField()
     calibration = models.IntegerField()
-    power = models.IntegerField('Powergrid')
-    cpu = models.IntegerField('CPU')
-    capacitor = models.IntegerField('Capacitor')
+    power = models.IntegerField('Powergrid [MW]')
+    cpu = models.IntegerField('CPU [tf]')
+    capacitor = models.IntegerField('Capacitor [GJ]')
 
     def __str__(self):
         return self.name
 
 
-class Fitting(models.Model):
-    name = models.TextField('Fitting name')
-    hull = models.ForeignKey(Hull, on_delete=models.PROTECT)
-
-
 class Module(models.Model):
     SLOT_CHOICES = (
-        ('low', 'LOW'),
-        ('medium', 'MEDIUM'),
-        ('high', 'HIGH')
+        ('low', 'Low'),
+        ('medium', 'Medium'),
+        ('high', 'High')
     )
-    fitting = models.ManyToManyField(Fitting)
-    name = models.TextField('Module name')
+    TIER_CHOICES = (
+        ('1', 'I'),
+        ('2', 'II'),
+        ('1.1', 'Meta 1'),
+        ('1.2', 'Meta 2'),
+        ('1.3', 'Meta 3'),
+        ('1.4', 'Meta 4'),
+        ('story', 'Storyline'),
+        ('faction', 'Faction'),
+        ('deadspace', 'Deadspace'),
+        ('officer', 'Officer')
+    )
+    name = models.TextField('Module name', unique=True)
+    activation_cost = models.IntegerField('Activation cost [GJ]', default=0)
+    duration = models.IntegerField('Duration [s]', default=0)
     slot = models.TextField(choices=SLOT_CHOICES)
-    required_cpu = models.IntegerField('CPU')
-    required_power = models.IntegerField('Powergrid')
-    # TODO: effect = ...
+    tier = models.TextField(choices=TIER_CHOICES)
+    required_cpu = models.IntegerField('CPU [tf]')
+    required_power = models.IntegerField('Powergrid [MW]')
 
     def __str__(self):
-        return f'{self.slot}|{self.name}'
+        return self.name
 
 
 class Rig(models.Model):
@@ -78,7 +85,13 @@ class Rig(models.Model):
         ('L', 'Large'),
         ('C', 'Capital')
     )
+    name = models.TextField('Rig name')
     size = models.TextField(choices=SIZE_CHOICES)
     calibration = models.IntegerField('Calibration cost')
     drawback = models.IntegerField('Drawback [%]')
-    # TODO: effect = ...
+
+
+class Fitting(models.Model):
+    name = models.TextField('Fitting name')
+    hull = models.ForeignKey(Hull, on_delete=models.PROTECT)
+    # TODO modules
