@@ -1,2 +1,5 @@
+lxml
+beautifulsoup4
 Django
 psycopg2
+requests
