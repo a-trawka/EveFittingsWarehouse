@@ -14,16 +14,23 @@ class Hull(models.Model):
         ('sansha', "Sansha's Nation"),
         ('serpentis', 'Serpentis'),
         ('sisters', 'Sisters Of EVE'),
-        ('triglavian', 'Triglavian Collective')
+        ('triglavian', 'Triglavian Collective'),
+        ('special', 'Special Edition Ship')
     )
     CLASS_CHOICES = (
         ('shuttle', 'Shuttle'),
         ('corvette', 'Corvette'),
-        ('frigate', 'Frigate'),
+        ('frig', 'Frigate'),
         ('cruiser', 'Cruiser'),
-        ('bcruiser', 'Battlecruiser'),
-        ('bship', 'Battleship'),
-        ('capital', 'Capital'),
+        ('bc', 'Battlecruiser'),
+        ('bs', 'Battleship'),
+        ('carrier', 'Carrier'),
+        ('dread', 'Dreadnought'),
+        ('fax', 'Force Auxiliary'),
+        ('titan', 'Titan'),
+        ('freighter', 'Freighter'),
+        ('industrial', 'Standard Industrial Ship'),
+        ('barge', 'Mining Barge')
     )
     name = models.TextField('Hull name', unique=True, max_length=40)
     hull_class = models.TextField(choices=CLASS_CHOICES)
